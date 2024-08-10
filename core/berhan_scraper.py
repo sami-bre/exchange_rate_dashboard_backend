@@ -22,17 +22,14 @@ def scrape_berhan_and_save_exchange_rates():
             buying_rate = Decimal(row.find_all('div', class_='col-3')[0].text.strip())
             selling_rate = Decimal(row.find_all('div', class_='col-3')[1].text.strip())
 
-            # Create or update Exchange objects
-            Exchange.objects.update_or_create(
+            # Create new Exchange objects
+            Exchange.objects.create(
                 currency_name=currency_code,
                 bank_name="Berhan Bank",
-                defaults={
-                    'buy_rate': buying_rate,
-                    'sell_rate': selling_rate,
-                    'updated_at': timezone.now()
-                }
+                buy_rate=buying_rate,
+                sell_rate=selling_rate,
+                updated_at=timezone.now()
             )
-
-        print("Exchange rates updated successfully.")
+        print("New exchange rates created successfully.")
     else:
         print("Exchange rate container not found on the page.")

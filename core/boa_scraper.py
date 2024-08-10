@@ -32,17 +32,15 @@ def scrape_boa_and_save_exchange_rates():
                     print(f"Skipping row due to invalid rate: {buying_rate} or {selling_rate}")
                     continue
                 
-                # Create or update the Exchange object
-                Exchange.objects.update_or_create(
+                # Create a new Exchange object
+                Exchange.objects.create(
                     currency_name=currency,
-                    defaults={
-                        'buy_rate': buying_rate,
-                        'sell_rate': selling_rate,
-                        'created_at': timezone.now(),
-                        'bank_name': 'Bank of Abyssinia'
-                    }
+                    buy_rate=buying_rate,
+                    sell_rate=selling_rate,
+                    created_at=timezone.now(),
+                    bank_name='Bank of Abyssinia'
                 )
         
-        print(f"Exchange rates updated for: {date_str}")
+        print(f"New exchange rates created for: {date_str}")
     else:
         print("Exchange rate table not found on the page.")

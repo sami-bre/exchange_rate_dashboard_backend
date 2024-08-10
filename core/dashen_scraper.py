@@ -22,18 +22,15 @@ def scrape_dashen_and_save_exchange_rates():
                 currency_name = columns[1].text.strip()
                 buying_rate = Decimal(columns[2].text.strip())
                 selling_rate = Decimal(columns[3].text.strip())
-
-                # Create or update Exchange objects
-                Exchange.objects.update_or_create(
+                
+                # Create new Exchange object
+                Exchange.objects.create(
                     currency_name=currency_code,
                     bank_name="Dashen Bank",
-                    defaults={
-                        'buy_rate': buying_rate,
-                        'sell_rate': selling_rate,
-                        'updated_at': timezone.now()
-                    }
+                    buy_rate=buying_rate,
+                    sell_rate=selling_rate,
+                    updated_at=timezone.now()
                 )
-
-        print("Exchange rates updated successfully.")
+        print("New exchange rates created successfully.")
     else:
         print("Exchange rate table not found on the page.")

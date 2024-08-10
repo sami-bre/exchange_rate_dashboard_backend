@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from decimal import Decimal
 from django.utils import timezone
-from core.models import Exchange  # Import the Exchange model
+from core.models import Exchange
 
 def scrape_nib_and_save_exchange_rates():
     url = "https://www.nibbanksc.com/"
@@ -20,33 +20,28 @@ def scrape_nib_and_save_exchange_rates():
             cols = row.find_all('td')
             if len(cols) >= 6:
                 currency = cols[1].text.strip()
-                cash_buying = Decimal(cols[2].text.strip())
-                cash_selling = Decimal(cols[3].text.strip())
+                # cash_buying = Decimal(cols[2].text.strip())
+                # cash_selling = Decimal(cols[3].text.strip())
                 trans_buying = Decimal(cols[4].text.strip())
                 trans_selling = Decimal(cols[5].text.strip())
+                
+                # # Create new Exchange objects for cash rates
+                # Exchange.objects.create(
+                #     currency_name=currency,
+                #     bank_name="NIB Bank Cash",
+                #     buy_rate=cash_buying,
+                #     sell_rate=cash_selling,
+                #     updated_at=timezone.now()
+                # )
 
-                # Create or update Exchange objects for cash rates
-                Exchange.objects.update_or_create(
-                    currency_name=currency,
-                    bank_name="NIB Bank Cash",
-                    defaults={
-                        'buy_rate': cash_buying,
-                        'sell_rate': cash_selling,
-                        'updated_at': timezone.now()
-                    }
-                )
-
-                # Create or update Exchange objects for transactional rates
-                Exchange.objects.update_or_create(
+                # Create new Exchange objects for transactional rates
+                Exchange.objects.create(
                     currency_name=currency,
                     bank_name="NIB Bank",
-                    defaults={
-                        'buy_rate': trans_buying,
-                        'sell_rate': trans_selling,
-                        'updated_at': timezone.now()
-                    }
+                    buy_rate=trans_buying,
+                    sell_rate=trans_selling,
+                    updated_at=timezone.now()
                 )
-
-        print("Exchange rates updated successfully.")
+        print("New exchange rates created successfully.")
     else:
         print("Exchange rate table not found on the page.")
