@@ -24,7 +24,7 @@ This project is a Django-based web scraper that automatically fetches and stores
 
 2. Build and run the Docker container:
    ```
-   docker build -t boa-scraper .
+   sudo docker build -t exchange_dashboard .
    sudo docker run -p 8000:8000 -p 5672:5672 -p 15672:15672 exchange_dashboard
    ```
 
