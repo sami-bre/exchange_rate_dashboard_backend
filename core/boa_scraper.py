@@ -25,6 +25,9 @@ def scrape_boa_and_save_exchange_rates():
                 buying_rate = columns[1].text.strip()
                 selling_rate = columns[2].text.strip()
 
+                if currency == 'Transaction Rates':
+                    break   # Stop the loop after the Transaction Rates row, we only need cash rates
+
                 try:
                     buying_rate = float(buying_rate)
                     selling_rate = float(selling_rate)
